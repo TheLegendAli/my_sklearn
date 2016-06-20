@@ -15,6 +15,7 @@ import warnings
 
 import numpy as np
 import scipy.sparse as sp
+import pdb
 
 from ..base import BaseEstimator, ClusterMixin, TransformerMixin
 from ..metrics.pairwise import euclidean_distances
@@ -37,11 +38,16 @@ from . import _k_means
 from ._k_means_elkan import k_means_elkan
 
 
+
+
 ###############################################################################
 # Initialization heuristic
 
 
 def _k_init(X, n_clusters, x_squared_norms, random_state, n_local_trials=None):
+
+    print "_k_init"
+    pdb.set_trace()
     """Init n_clusters seeds according to k-means++
 
     Parameters
@@ -143,6 +149,8 @@ def _k_init(X, n_clusters, x_squared_norms, random_state, n_local_trials=None):
 # K-means batch estimation by EM (expectation maximization)
 
 def _validate_center_shape(X, n_centers, centers):
+    print "_validate_center_shape"
+    pdb.set_trace()
     """Check if centers is compatible with X and n_centers"""
     if len(centers) != n_centers:
         raise ValueError('The shape of the initial centers (%s) '
@@ -156,6 +164,8 @@ def _validate_center_shape(X, n_centers, centers):
 
 
 def _tolerance(X, tol):
+    print "_tolerance"
+    pdb.set_trace()
     """Return a tolerance which is independent of the dataset"""
     if sp.issparse(X):
         variances = mean_variance_axis(X, axis=0)[1]
@@ -168,6 +178,8 @@ def k_means(X, n_clusters, init='k-means++', precompute_distances='auto',
             n_init=10, max_iter=300, verbose=False,
             tol=1e-4, random_state=None, copy_x=True, n_jobs=1,
             algorithm="auto", return_n_iter=False):
+    print "k_means"
+    pdb.set_trace()
     """K-means clustering algorithm.
 
     Read more in the :ref:`User Guide <k_means>`.
@@ -382,6 +394,8 @@ def _kmeans_single_elkan(X, n_clusters, max_iter=300, init='k-means++',
                          verbose=False, x_squared_norms=None,
                          random_state=None, tol=1e-4,
                          precompute_distances=True):
+    print "_kmeans_single_elkan"
+    pdb.set_trace()
     if sp.issparse(X):
         raise ValueError("algorithm='elkan' not supported for sparse input X")
     X = check_array(X, order="C")
@@ -404,6 +418,8 @@ def _kmeans_single_lloyd(X, n_clusters, max_iter=300, init='k-means++',
                          verbose=False, x_squared_norms=None,
                          random_state=None, tol=1e-4,
                          precompute_distances=True):
+    print "_kmeans_single_lloyd"
+    pdb.set_trace()
     """A single run of k-means, assumes preparation completed prior.
 
     Parameters
@@ -524,6 +540,8 @@ def _kmeans_single_lloyd(X, n_clusters, max_iter=300, init='k-means++',
 
 
 def _labels_inertia_precompute_dense(X, x_squared_norms, centers, distances):
+    print "_labels_inertia_precompute_dense"
+    pdb.set_trace()
     """Compute labels and inertia using a full distance matrix.
 
     This will overwrite the 'distances' array in-place.
@@ -572,6 +590,8 @@ def _labels_inertia_precompute_dense(X, x_squared_norms, centers, distances):
 
 def _labels_inertia(X, x_squared_norms, centers,
                     precompute_distances=True, distances=None):
+    print "_labels_inertia"
+    pdb.set_trace()
     """E step of the K-means EM algorithm.
 
     Compute the labels and the inertia of the given samples and centers.
@@ -625,6 +645,8 @@ def _labels_inertia(X, x_squared_norms, centers,
 
 def _init_centroids(X, k, init, random_state=None, x_squared_norms=None,
                     init_size=None):
+    print "_init_centroids"
+    pdb.set_trace()
     """Compute the initial centroids
 
     Parameters
@@ -701,6 +723,8 @@ def _init_centroids(X, k, init, random_state=None, x_squared_norms=None,
 
 
 class KMeans(BaseEstimator, ClusterMixin, TransformerMixin):
+    print "KMEANS class"
+    pdb.set_trace()
     """K-Means clustering
 
     Read more in the :ref:`User Guide <k_means>`.
@@ -820,6 +844,8 @@ class KMeans(BaseEstimator, ClusterMixin, TransformerMixin):
                  verbose=0, random_state=None, copy_x=True,
                  n_jobs=1, algorithm='auto'):
 
+        print "K means class init"
+        pdb.set_trace()
         self.n_clusters = n_clusters
         self.init = init
         self.max_iter = max_iter
@@ -833,6 +859,8 @@ class KMeans(BaseEstimator, ClusterMixin, TransformerMixin):
         self.algorithm = algorithm
 
     def _check_fit_data(self, X):
+        print "_check_fit_data"
+        pdb.set_trace()
         """Verify that the number of samples given is larger than k"""
         X = check_array(X, accept_sparse='csr', dtype=np.float64)
         if X.shape[0] < self.n_clusters:
@@ -853,6 +881,8 @@ class KMeans(BaseEstimator, ClusterMixin, TransformerMixin):
         return X
 
     def fit(self, X, y=None):
+        print "fit"
+        pdb.set_trace()
         """Compute k-means clustering.
 
         Parameters
@@ -872,6 +902,8 @@ class KMeans(BaseEstimator, ClusterMixin, TransformerMixin):
         return self
 
     def fit_predict(self, X, y=None):
+        print "fit_predict"
+        pdb.set_trace()
         """Compute cluster centers and predict cluster index for each sample.
 
         Convenience method; equivalent to calling fit(X) followed by
@@ -880,6 +912,8 @@ class KMeans(BaseEstimator, ClusterMixin, TransformerMixin):
         return self.fit(X).labels_
 
     def fit_transform(self, X, y=None):
+        print "fit_transform"
+        pdb.set_trace()
         """Compute clustering and transform X to cluster-distance space.
 
         Equivalent to fit(X).transform(X), but more efficiently implemented.
@@ -892,6 +926,8 @@ class KMeans(BaseEstimator, ClusterMixin, TransformerMixin):
         return self.fit(X)._transform(X)
 
     def transform(self, X, y=None):
+        print "transform"
+        pdb.set_trace()
         """Transform X to a cluster-distance space.
 
         In the new space, each dimension is the distance to the cluster
@@ -914,10 +950,14 @@ class KMeans(BaseEstimator, ClusterMixin, TransformerMixin):
         return self._transform(X)
 
     def _transform(self, X):
+        print "_transform"
+        pdb.set_trace()
         """guts of transform method; no input validation"""
         return euclidean_distances(X, self.cluster_centers_)
 
     def predict(self, X):
+        print "predict"
+        pdb.set_trace()
         """Predict the closest cluster each sample in X belongs to.
 
         In the vector quantization literature, `cluster_centers_` is called
@@ -941,6 +981,8 @@ class KMeans(BaseEstimator, ClusterMixin, TransformerMixin):
         return _labels_inertia(X, x_squared_norms, self.cluster_centers_)[0]
 
     def score(self, X, y=None):
+        print "score"
+        pdb.set_trace()
         """Opposite of the value of X on the K-means objective.
 
         Parameters
@@ -965,6 +1007,8 @@ def _mini_batch_step(X, x_squared_norms, centers, counts,
                      distances, random_reassign=False,
                      random_state=None, reassignment_ratio=.01,
                      verbose=False):
+    print "_mini_batch_step"
+    pdb.set_trace()
     """Incremental update of the centers for the Minibatch K-Means algorithm.
 
     Parameters
@@ -1097,6 +1141,8 @@ def _mini_batch_step(X, x_squared_norms, centers, counts,
 def _mini_batch_convergence(model, iteration_idx, n_iter, tol,
                             n_samples, centers_squared_diff, batch_inertia,
                             context, verbose=0):
+    print "_mini_batch_convergence"
+    pdb.set_trace()
     """Helper function to encapsulate the early stopping logic"""
     # Normalize inertia to be able to compare values when
     # batch_size changes
@@ -1161,6 +1207,8 @@ def _mini_batch_convergence(model, iteration_idx, n_iter, tol,
 
 
 class MiniBatchKMeans(KMeans):
+    print "MiniBatchKMeans"
+    pdb.set_trace()
     """Mini-Batch K-Means clustering
 
     Parameters
@@ -1263,6 +1311,8 @@ class MiniBatchKMeans(KMeans):
                  random_state=None, tol=0.0, max_no_improvement=10,
                  init_size=None, n_init=3, reassignment_ratio=0.01):
 
+        print "mini class cluster"
+        pdb.set_trace()
         super(MiniBatchKMeans, self).__init__(
             n_clusters=n_clusters, init=init, max_iter=max_iter,
             verbose=verbose, random_state=random_state, tol=tol, n_init=n_init)
@@ -1274,6 +1324,8 @@ class MiniBatchKMeans(KMeans):
         self.reassignment_ratio = reassignment_ratio
 
     def fit(self, X, y=None):
+        print "fit"
+        pdb.set_trace()
         """Compute the centroids on X by chunking it into mini-batches.
 
         Parameters
@@ -1435,6 +1487,8 @@ class MiniBatchKMeans(KMeans):
         return np.hstack(labels), np.sum(inertia)
 
     def partial_fit(self, X, y=None):
+        print "partial_fit"
+        pdb.set_trace()
         """Update k means estimate on a single mini-batch X.
 
         Parameters
@@ -1488,6 +1542,8 @@ class MiniBatchKMeans(KMeans):
         return self
 
     def predict(self, X):
+        print "predict"
+        pdb.set_trace()
         """Predict the closest cluster each sample in X belongs to.
 
         In the vector quantization literature, `cluster_centers_` is called
